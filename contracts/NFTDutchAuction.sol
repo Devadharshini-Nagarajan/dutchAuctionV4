@@ -30,7 +30,7 @@ contract NFTDutchAuction is Initializable {
         uint256 _reservePrice,
         uint256 _numBlocksAuctionOpen,
         uint256 _offerPriceDecrement
-    ) internal onlyInitializing {
+    ) public onlyInitializing {
         token_address = MyERC20Token(erc20TokenAddress);
         NFTAddress = MyDutchNFT(erc721TokenAddress);
         NFTId = _nftTokenId;

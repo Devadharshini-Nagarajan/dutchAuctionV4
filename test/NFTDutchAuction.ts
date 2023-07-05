@@ -132,6 +132,13 @@ describe("NFTDutchAuction", function () {
       expect(await bid_token.balanceOf(account1.address)).to.equal(bidder_balance);
     });
 
+    it("Should revert if called after initialization", async function () {
+      const { bid_token, dutch_nft,nft_id,basic_dutch_auction,owner, account1, account2, account3, account4 }  = await loadFixture(deployNFTDutchAuction);
+      await expect(basic_dutch_auction.set_values(account1.address, account2.address, 1, 1000, 10, 10)).to.be.revertedWith(
+        "Initializable: contract is not initializing"
+      );
+    });
+
     it("Should accept a valid bid and token transfered to buyer", async function () {
       const { bid_token, dutch_nft,nft_id,basic_dutch_auction,owner, account1, account2, account3, account4 } = await loadFixture(deployNFTDutchAuction);
         const balance_before = await owner.getBalance();

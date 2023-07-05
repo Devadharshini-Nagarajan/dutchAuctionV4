@@ -57,7 +57,7 @@ DA:62,2
 LF:20
 LH:20
 BRDA:33,1,0,3
-BRDA:33,1,1,0
+BRDA:33,1,1,1
 BRDA:50,2,0,4
 BRDA:50,2,1,1
 BRDA:51,3,0,3
@@ -65,7 +65,7 @@ BRDA:51,3,1,1
 BRDA:56,4,0,2
 BRDA:56,4,1,1
 BRF:8
-BRH:7
+BRH:8
 end_of_record
 TN:
 SF:/Users/deva/Desktop/Deva/MSIS/Sem 3/Crypto/V4/dutchAuctionV4.0/contracts/NFTDutchAuctionProxy.sol
