@@ -50,8 +50,19 @@ describe("NFTDutchAuctionProxy", function () {
     );
   });
 
-//   it("Should be able to be upgraded by owner", async function () {
-//     const { basic_dutch_auction, owner, account3 } = await loadFixture(deployNFTDutchAuctionProxy);
-//     await basic_dutch_auction.connect(owner).upgradeTo(account3.address);
-//   });
+  it("Should revert if called after initialization", async function () {
+    const { basic_dutch_auction,owner, account2, account3 } = await loadFixture(deployNFTDutchAuctionProxy);
+    await expect(basic_dutch_auction.initialize(
+        owner.address,
+        account2.address,
+        1,
+        1000,
+        10,
+        10
+    )).to.be.revertedWith(
+        "Initializable: contract is already initialized"
+    );
+});
+
+
 });

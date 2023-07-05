@@ -84,9 +84,9 @@ DA:38,6
 LF:4
 LH:4
 BRDA:28,1,0,6
-BRDA:28,1,1,0
+BRDA:28,1,1,1
 BRDA:43,2,0,0
 BRDA:43,2,1,1
 BRF:4
-BRH:2
+BRH:3
 end_of_record
