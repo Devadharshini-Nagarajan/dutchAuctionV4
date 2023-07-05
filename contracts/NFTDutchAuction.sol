@@ -4,10 +4,11 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./MyDutchNFT.sol";
 import "./MyERC20Token.sol";
 
-contract NFTDutchAuction {
+contract NFTDutchAuction is Initializable {
     using SafeMath for uint256;
 
     MyDutchNFT public NFTAddress;
@@ -19,17 +20,17 @@ contract NFTDutchAuction {
     uint256 public offerPriceDecrement;
     uint256 public initialPrice;
     uint256 public auctionEndBlock;
-    address payable public owner;
+    address payable public nft_owner;
     bool private isAuctionOver;
 
-    constructor(
+    function set_values(
         address erc20TokenAddress,
         address erc721TokenAddress,
         uint256 _nftTokenId,
         uint256 _reservePrice,
         uint256 _numBlocksAuctionOpen,
         uint256 _offerPriceDecrement
-    ) {
+    ) internal onlyInitializing {
         token_address = MyERC20Token(erc20TokenAddress);
         NFTAddress = MyDutchNFT(erc721TokenAddress);
         NFTId = _nftTokenId;
@@ -41,23 +42,23 @@ contract NFTDutchAuction {
         );
         auctionStartBlock = block.number;
         auctionEndBlock = block.number + numBlocksAuctionOpen;
-        owner = payable(msg.sender);
+        nft_owner = payable(msg.sender);
         isAuctionOver = false;
     }
 
     function placeBid(uint256 _amount) public payable returns (address) {
-        require(msg.sender != owner, "Owner can't bid");
+        require(msg.sender != nft_owner, "Owner can't bid");
         require(block.number <= auctionEndBlock, "Auction is ended!");
 
         uint256 goneBlocks = auctionEndBlock - block.number;
         uint256 currentPrice = initialPrice - goneBlocks * offerPriceDecrement;
 
-        require(_amount >= currentPrice,"Lesser price");
+        require(_amount >= currentPrice, "Lesser price");
 
-        token_address.transferFrom(msg.sender,owner,_amount);
-        NFTAddress.safeTransferFrom(owner, msg.sender, NFTId);
+        token_address.transferFrom(msg.sender, nft_owner, _amount);
+        NFTAddress.safeTransferFrom(nft_owner, msg.sender, NFTId);
         isAuctionOver = true;
-       
+
         return msg.sender;
     }
 }

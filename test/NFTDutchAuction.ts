@@ -1,6 +1,6 @@
 import {  loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
-import { ethers } from "hardhat";
+import { ethers, upgrades } from "hardhat";
 
 // Helper function to increase the number of blocks
 async function increaseBlocks(numBlocks: number): Promise<void> {
@@ -39,8 +39,10 @@ describe("NFTDutchAuction", function () {
     const numBlocksAuctionOpen = 100;
     const offerPriceDecrement = 10;
 
-    const NFTDutchAuction = await ethers.getContractFactory("NFTDutchAuction");
-    const basic_dutch_auction = await NFTDutchAuction.deploy(token_address, nft_address,nft_id,reservePrice, numBlocksAuctionOpen, offerPriceDecrement);
+    // const NFTDutchAuction = await ethers.getContractFactory("NFTDutchAuction");
+    // const basic_dutch_auction = await NFTDutchAuction.deploy(token_address, nft_address,nft_id,reservePrice, numBlocksAuctionOpen, offerPriceDecrement);
+    const NFTDutchAuction = await ethers.getContractFactory("NFTDutchAuctionProxy");
+    const basic_dutch_auction = await upgrades.deployProxy(NFTDutchAuction,[token_address,nft_address,nft_id,reservePrice, numBlocksAuctionOpen, offerPriceDecrement],{ kind : 'uups'});
     await dutch_nft.connect(owner).approve(basic_dutch_auction.address,nft_id);
 
     return { bid_token, token_address, dutch_nft, nft_address, nft_id, basic_dutch_auction, reservePrice, numBlocksAuctionOpen, offerPriceDecrement, owner, account1, account2, account3, account4 };
