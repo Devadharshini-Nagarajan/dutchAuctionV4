@@ -4,7 +4,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { getAddress } from "ethers/lib/utils";
 
-describe("bidToken", function () {
+describe("MyERC20Token", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -12,7 +12,7 @@ describe("bidToken", function () {
     
     const [owner, account1, account2] = await ethers.getSigners();
 
-    const BidToken = await ethers.getContractFactory("BidToken");
+    const BidToken = await ethers.getContractFactory("MyERC20Token");
     const bid_token = await BidToken.deploy();
 
     return { bid_token, owner, account1, account2 };
@@ -21,7 +21,7 @@ describe("bidToken", function () {
   describe("Deployment", function () {
     it("Should set the right name", async function () {
       const { bid_token, owner, account1 } = await loadFixture(deployBidToken);
-      expect(await bid_token.name()).to.equal("BidToken");
+      expect(await bid_token.name()).to.equal("MyERC20Token");
     });
 
     it("Should set the right symbol", async function () {
