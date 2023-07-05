@@ -1,17 +1,5 @@
 # Sample Hardhat Project
 
-This project demonstrates a basic DutchAuction use case. It accepts hight bid of ERC20 token name Bid tokens, and transfer the NFT to bidder from owner and this version of dutchAuction is upgradable we can use proxy to upgrade this smart contracts.
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
-
 Version
 =======
 > solidity-coverage: v0.8.2
@@ -19,18 +7,18 @@ Version
 Instrumenting for coverage...
 =============================
 
-> bidToken.sol
-> dutchNFT.sol
-> Lock.sol
-> NFTDutchAuction_ERC20bids.sol
-> proxy_contract.sol
+> MyDutchNFT.sol
+> MyERC20Token.sol
+> NFTDutchAuction.sol
+> NFTDutchAuctionProxy.sol
 
 Compilation:
 ============
 
-Generating typings for: 29 artifacts in dir: typechain-types for target: ethers-v5
-Successfully generated 92 typings!
-Compiled 29 Solidity files successfully
+(node:82591) ExperimentalWarning: stream/web is an experimental feature. This feature could change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+Nothing to compile
+No need to generate any newer typings.
 
 Network Info
 ============
@@ -39,65 +27,54 @@ Network Info
 
 
 
-  Lock
+  MyDutchNFT
     Deployment
-      ✔ Should set the right unlockTime (73ms)
-      ✔ Should set the right owner
-      ✔ Should receive and store the funds to lock
-      ✔ Should fail if the unlockTime is not in the future
-    Withdrawals
-      Validations
-        ✔ Should revert with the right error if called too soon
-        ✔ Should revert with the right error if called from another account
-        ✔ Shouldn't fail if the unlockTime has arrived and the owner calls it
-      Events
-        ✔ Should emit an event on withdrawals
-      Transfers
-        ✔ Should transfer the funds to the owner
+      ✔ Should set the right name (135ms)
+      ✔ Should set the right symbol
+    Minting
+      ✔ Mint NFTs and cross verify owner address of NFT ids (113ms)
+
+  MyERC20Token
+    Deployment
+      ✔ Should set the right name (56ms)
+      ✔ Should set the right symbol
+    total supply
+      ✔ Should mint the right supply
 
   NFTDutchAuction
     Deployment
-      ✔ Should set the right owner (165ms)
+      ✔ Should set the right owner (328ms)
+      ✔ Should set the right erc20 token address
       ✔ Should set the right erc721 address
       ✔ Should set the right erc721 token ID
       ✔ Should set the right reserve price
       ✔ Should set the right number of block auction open
       ✔ Should set the right offer price decrement
-      ✔ check owner of token id 1
+      ✔ Should have address for nft token id 1 as same as owner's address
     Auction
       ✔ Is auction contract approved for transfering NFT
-      ✔ Buyers will bid and bid will be reverted with not enough amount
-      ✔ Buyer's bid will accepted and token transfered to buyer
-      ✔ Buyers can not bid after auction ended
-      ✔ Owner can not bid
+      ✔ Should not accept bid from owner
+      ✔ Should reject bids after the auction has ended (47ms)
+      ✔ Should reject bids after the no of blocks open count reached (68ms)
+      ✔ Should reject a bid if price lesser and transfer back it to buyer (62ms)
+      ✔ Should revert if called after initialization
+      ✔ Should accept a valid bid and token transfered to buyer (54ms)
 
-  bidToken
-    Deployment
-      ✔ Should set the right name
-      ✔ Should set the right symbol
-    total supply
-      ✔ Should mint the right supply
-
-  dutchNFT
-    Deployment
-      ✔ Should set the right name
-      ✔ Should set the right symbol
-    Minting
-      ✔ Mint NFTs
+  NFTDutchAuctionProxy
+    ✔ Should be owned by the deployer (231ms)
+    ✔ Should not be able to be upgraded by non-owner
 
 
-  27 passing (486ms)
+  23 passing (1s)
 
---------------------------------|----------|----------|----------|----------|----------------|
-File                            |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
---------------------------------|----------|----------|----------|----------|----------------|
- contracts/                     |      100 |    73.08 |    91.67 |      100 |                |
-  Lock.sol                      |      100 |      100 |      100 |      100 |                |
-  NFTDutchAuction_ERC20bids.sol |      100 |       75 |      100 |      100 |                |
-  bidToken.sol                  |      100 |      100 |      100 |      100 |                |
-  dutchNFT.sol                  |      100 |      100 |      100 |      100 |                |
-  proxy_contract.sol            |      100 |       25 |    66.67 |      100 |                |
---------------------------------|----------|----------|----------|----------|----------------|
-All files                       |      100 |    73.08 |    91.67 |      100 |                |
---------------------------------|----------|----------|----------|----------|----------------|
-
+---------------------------|----------|----------|----------|----------|----------------|
+File                       |  % Stmts | % Branch |  % Funcs |  % Lines |Uncovered Lines |
+---------------------------|----------|----------|----------|----------|----------------|
+ contracts/                |      100 |    83.33 |     87.5 |      100 |                |
+  MyDutchNFT.sol           |      100 |      100 |      100 |      100 |                |
+  MyERC20Token.sol         |      100 |      100 |      100 |      100 |                |
+  NFTDutchAuction.sol      |      100 |      100 |      100 |      100 |                |
+  NFTDutchAuctionProxy.sol |      100 |       50 |    66.67 |      100 |                |
+---------------------------|----------|----------|----------|----------|----------------|
+All files                  |      100 |    83.33 |     87.5 |      100 |                |
+---------------------------|----------|----------|----------|----------|----------------|
